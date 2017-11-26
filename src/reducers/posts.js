@@ -3,7 +3,8 @@ import {
   RECEIVE_POSTS,
   ADD_POST,
   EDIT_POST,
-  VOTE_POST
+  VOTE_POST,
+  DELETE_POST
 } from '../actions/posts'
 
 const initialState = {
@@ -53,6 +54,17 @@ export default function (state = initialState, action) {
           }
         })
       })
+    case DELETE_POST:
+      return Object.assign({}, state, {
+        items: state.items.map((post) => {
+          if (post.id === action.data.id) {
+            return action.data
+          } else {
+            return post
+          }
+        })
+      })
+    
     default:
       return state
   }

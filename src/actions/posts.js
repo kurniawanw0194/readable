@@ -5,6 +5,7 @@ export const RECEIVE_POSTS = 'RECEIVE_POSTS'
 export const ADD_POST = 'ADD_POST'
 export const EDIT_POST = 'EDIT_POST'
 export const VOTE_POST = 'VOTE_POST'
+export const DELETE_POST = 'DELETE_POST'
 
 export const requestPosts = () => {
   return {
@@ -65,6 +66,22 @@ export const votePost = (id, option) => {
     }).then(res => res.json())
       .then(data => dispatch({
         type: VOTE_POST,
+        data
+      }))
+  }
+}
+
+export const deletePost = (id) => {
+  return dispatch => {
+    return fetch(`${api}/posts/${id}`, {
+      method: 'DELETE',
+      headers: {
+        ...headers,
+        'Content-Type': 'application/json'
+      }
+    }).then(res => res.json())
+      .then(data => dispatch({
+        type: DELETE_POST,
         data
       }))
   }
