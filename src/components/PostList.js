@@ -1,17 +1,17 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { likePost, dislikePost, fetchPosts } from '../actions/posts'
+import { fetchPosts, votePost } from '../actions/posts'
 import { CircularProgress } from 'material-ui'
 import Post from './Post'
 import { StyleSheet, css } from 'aphrodite'
 
 class PostList extends Component {
   _handleLike = (id) => {
-    this.props.like(id)
+    this.props.votePost(id, 'upVote')
   }
 
   _handleDislike = (id) => {
-    this.props.dislike(id)
+    this.props.votePost(id, 'downVote')
   }
 
   componentDidMount() {
@@ -56,9 +56,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchPosts: () => dispatch(fetchPosts()),
-    like: (id) => dispatch(likePost(id)),
-    dislike: (id) => dispatch(dislikePost(id))
+    votePost: (id, option) => dispatch(votePost(id, option)),
+    fetchPosts: () => dispatch(fetchPosts())
   }
 }
 

@@ -3,8 +3,7 @@ import {
   RECEIVE_POSTS,
   ADD_POST,
   EDIT_POST,
-  LIKE_POST,
-  DISLIKE_POST
+  VOTE_POST
 } from '../actions/posts'
 
 const initialState = {
@@ -44,21 +43,11 @@ export default function (state = initialState, action) {
           }
         })
       })
-    case LIKE_POST:
+    case VOTE_POST:
       return Object.assign({}, state, {
         items: state.items.map((post) => {
-          if (post.id === action.id) {
-            return Object.assign(post, { voteScore: post.voteScore + 1 })
-          } else {
-            return post
-          }
-        })
-      })
-    case DISLIKE_POST:
-      return Object.assign({}, state, {
-        items: state.items.map((post) => {
-          if (post.id === action.id) {
-            return Object.assign(post, { voteScore: post.voteScore - 1 })
+          if (post.id === action.data.id) {
+            return action.data
           } else {
             return post
           }

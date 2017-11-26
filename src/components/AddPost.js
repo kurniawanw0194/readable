@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { StyleSheet, css } from 'aphrodite'
-import { TextField, RaisedButton, RadioButtonGroup, RadioButton } from 'material-ui'
+import { TextField, RaisedButton, RadioButtonGroup, RadioButton, Snackbar } from 'material-ui'
 import uuid from 'uuid'
 import * as api from '../utils/api'
 import { connect } from 'react-redux'
@@ -11,10 +11,16 @@ class AddPost extends Component {
     title: '',
     body: '',
     categories: [],
-    selectedCategory: ''
+    selectedCategory: '',
+    openSnackbar: false
   }
 
   _handleSubmit = () => {
+    if (this.state.title === '' || this.state.body === '' || this.state.selectedCategory === '') {
+      this.setState({ openSnackbar: true })
+      return
+    }
+
     const post = {
       id: uuid(),
       timestamp: Date.now(),
@@ -27,6 +33,8 @@ class AddPost extends Component {
     this.props.addPost(post)
     this.props.history.push('/')
   }
+
+  _handleCloseSnackbar = () => this.setState({ openSnackbar: false })
 
   componentDidMount() {
     api.getCategories().then((categories) => {
@@ -65,6 +73,12 @@ class AddPost extends Component {
           </RadioButtonGroup>
         </div>
         <RaisedButton label='Submit' secondary={true} onClick={this._handleSubmit} />
+        <Snackbar
+          open={this.state.openSnackbar}
+          message='Required fields cannot be empty.'
+          autoHideDuration={3000}
+          onRequestClose={this._handleCloseSnackbar}
+        />
       </div>
     )
   }

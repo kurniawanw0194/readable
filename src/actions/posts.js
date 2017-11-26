@@ -4,8 +4,7 @@ export const REQUEST_POSTS = 'REQUEST_POSTS'
 export const RECEIVE_POSTS = 'RECEIVE_POSTS'
 export const ADD_POST = 'ADD_POST'
 export const EDIT_POST = 'EDIT_POST'
-export const LIKE_POST = 'LIKE_POST'
-export const DISLIKE_POST = 'DISLIKE_POST'
+export const VOTE_POST = 'VOTE_POST'
 
 export const requestPosts = () => {
   return {
@@ -54,16 +53,19 @@ export const editPost = (id, updates) => {
   }
 }
 
-export const likePost = (id) => {
-  return {
-    type: LIKE_POST,
-    id
-  }
-}
-
-export const dislikePost = (id) => {
-  return {
-    type: DISLIKE_POST,
-    id
+export const votePost = (id, option) => {
+  return dispatch => {
+    return fetch(`${api}/posts/${id}`, {
+      method: 'POST',
+      headers: {
+        ...headers,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ option })
+    }).then(res => res.json())
+      .then(data => dispatch({
+        type: VOTE_POST,
+        data
+      }))
   }
 }
