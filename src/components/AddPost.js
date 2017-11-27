@@ -86,7 +86,9 @@ class AddPost extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    padding: '16px 64px 16px 64px'
+    maxWidth: '800px',
+    margin: 'auto',
+    padding: '32px'
   },
   form: {
     marginTop: '16px',

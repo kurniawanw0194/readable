@@ -35,6 +35,16 @@ class PostList extends Component {
       )
     }
 
+    this.props.posts.items.sort((a, b) => {
+      if (this.state.sortBy === 'date') {
+        return a.timestamp < b.timestamp ? 1 : -1
+      } else if (this.state.sortBy === 'score') {
+        return a.voteScore < b.voteScore ? 1 : -1
+      } else {
+        return 1
+      }
+    })
+
     return (
       <div>
         <div className={css(styles.filterContainer)}>
@@ -47,15 +57,27 @@ class PostList extends Component {
             <MenuItem value='score' primaryText='Score' />
           </SelectField>
         </div>
-        {this.props.posts.items.filter((post) => !post.deleted).map((post) =>
-          <Post
-            key={post.id}
-            post={post}
-            onLike={this._handleLike}
-            onDislike={this._handleDislike}
-            onDelete={this._handleDelete}
-          />
-        )}
+        {this.props.match.path === '/:category'
+          ? this.props.posts.items.filter((post) => !post.deleted && post.category === this.props.match.params.category)
+              .map((post) =>
+                <Post
+                  key={post.id}
+                  post={post}
+                  onLike={this._handleLike}
+                  onDislike={this._handleDislike}
+                  onDelete={this._handleDelete}
+                />
+              )
+          : this.props.posts.items.filter((post) => !post.deleted).map((post) =>
+              <Post
+                key={post.id}
+                post={post}
+                onLike={this._handleLike}
+                onDislike={this._handleDislike}
+                onDelete={this._handleDelete}
+              />
+            )
+        }
       </div>
     )
   }
