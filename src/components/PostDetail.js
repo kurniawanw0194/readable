@@ -19,7 +19,12 @@ class PostDetail extends Component {
   componentDidMount() {
     const id = this.props.match.params.id
 
-    api.getPostDetail(id).then(post => this.setState({ post }))
+    api.getPostDetail(id).then(post => {
+      if (Object.keys(post).length === 0 && post.constructor === Object)
+        this.props.history.push('/')
+      else
+        this.setState({ post })
+    })
 
     this.props.fetchComments(id)
   }
