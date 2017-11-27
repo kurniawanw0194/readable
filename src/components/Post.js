@@ -56,7 +56,7 @@ class Post extends Component {
           </CardText>
           <CardActions expandable={true} className={css(styles.cardActions)}>
             <FlatButton label='Delete' secondary={true} onClick={this._handleOpenDialog} />
-            <FlatButton label='Edit' primary={true} />
+            <FlatButton label='Edit' primary={true} href={'edit/' + post.id} />
             <FlatButton label='Like' onClick={this._handleLike} />
             <FlatButton label='Dislike' onClick={this._handleDislike} />
             <FlatButton label='Comment' />
@@ -78,6 +78,8 @@ class Post extends Component {
 
 const styles = StyleSheet.create({
   container: {
+    maxWidth: '800px',
+    margin: 'auto',
     padding: '16px'
   },
   cardActions: {

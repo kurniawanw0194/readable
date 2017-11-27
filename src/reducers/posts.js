@@ -37,7 +37,7 @@ export default function (state = initialState, action) {
           if (post.id === action.id) {
             return {
               ...post,
-              ...action.updates
+              ...action.data
             }
           } else {
             return post

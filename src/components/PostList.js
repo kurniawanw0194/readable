@@ -37,15 +37,16 @@ class PostList extends Component {
 
     return (
       <div>
-        <SelectField
-          floatingLabelText='Sort by'
-          value={this.state.sortBy}
-          onChange={(event, index, value) => this.setState({ sortBy: value })}
-          className={css(styles.filter)}
-        >
-          <MenuItem value='date' primaryText='Date' />
-          <MenuItem value='score' primaryText='Score' />
-        </SelectField>
+        <div className={css(styles.filterContainer)}>
+          <SelectField
+            floatingLabelText='Sort by'
+            value={this.state.sortBy}
+            onChange={(event, index, value) => this.setState({ sortBy: value })}
+          >
+            <MenuItem value='date' primaryText='Date' />
+            <MenuItem value='score' primaryText='Score' />
+          </SelectField>
+        </div>
         {this.props.posts.items.filter((post) => !post.deleted).map((post) =>
           <Post
             key={post.id}
@@ -65,8 +66,10 @@ const styles = StyleSheet.create({
     padding: '16px',
     textAlign: 'center'
   },
-  filter: {
-    margin: '16px'
+  filterContainer: {
+    maxWidth: '800px',
+    margin: 'auto',
+    padding: '16px'
   }
 })
 

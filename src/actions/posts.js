@@ -46,11 +46,21 @@ export const addPost = (data) => {
   }
 }
 
-export const editPost = (id, updates) => {
-  return {
-    type: EDIT_POST,
-    id,
-    updates
+export const editPost = (id, data) => {
+  return dispatch => {
+    return fetch(`${api}/posts/${id}`, {
+      method: 'PUT',
+      headers: {
+        ...headers,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    }).then(res => res.json())
+      .then(data => dispatch({
+        type: EDIT_POST,
+        id: data.id,
+        data
+      }))
   }
 }
 

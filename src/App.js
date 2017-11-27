@@ -5,6 +5,7 @@ import { Switch, Route, withRouter } from 'react-router-dom'
 import { StyleSheet, css } from 'aphrodite'
 import PostList from './components/PostList'
 import AddPost from './components/AddPost'
+import EditPost from './components/EditPost'
 
 class App extends Component {
   render() {
@@ -22,6 +23,11 @@ class App extends Component {
               exact
               path='/add'
               component={AddPost}
+            />
+            <Route
+              exact
+              path='/edit/:id'
+              component={EditPost}
             />
           </Switch>
         </div>
