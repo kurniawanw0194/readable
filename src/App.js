@@ -8,6 +8,7 @@ import PostList from './components/PostList'
 import AddPost from './components/AddPost'
 import EditPost from './components/EditPost'
 import PostDetail from './components/PostDetail'
+import ErrorPage from './components/ErrorPage'
 import * as api from './utils/api'
 
 class App extends Component {
@@ -70,6 +71,9 @@ class App extends Component {
               exact
               path='/:category'
               component={PostList}
+            />
+            <Route
+              component={ErrorPage}
             />
           </Switch>
         </div>

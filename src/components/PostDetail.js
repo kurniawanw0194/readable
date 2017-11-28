@@ -8,6 +8,7 @@ import { connect } from 'react-redux'
 import { fetchComments, addComment, deleteComment, editComment, voteComment } from '../actions/comments'
 import Comment from './Comment'
 import uuid from 'uuid'
+import ErrorPage from './ErrorPage'
 
 class PostDetail extends Component {
 
@@ -19,12 +20,7 @@ class PostDetail extends Component {
   componentDidMount() {
     const id = this.props.match.params.id
 
-    api.getPostDetail(id).then(post => {
-      if (Object.keys(post).length === 0 && post.constructor === Object)
-        this.props.history.push('/')
-      else
-        this.setState({ post })
-    })
+    api.getPostDetail(id).then(post => this.setState({ post }))
 
     this.props.fetchComments(id)
   }
@@ -59,6 +55,12 @@ class PostDetail extends Component {
         <div className={css(styles.progress)}>
           <CircularProgress />
         </div>
+      )
+    }
+
+    if (Object.keys(post).length === 0 && post.constructor === Object) {
+      return (
+        <ErrorPage />
       )
     }
 

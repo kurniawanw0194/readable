@@ -3,6 +3,7 @@ import { Card, CardHeader, CardTitle, CardText, CardActions, FlatButton, Dialog 
 import { StyleSheet, css } from 'aphrodite'
 import avatar from '../assets/avatar.png'
 import Timestamp from 'react-timestamp'
+import { withRouter } from 'react-router-dom';
 
 class Post extends Component {
   state = {
@@ -49,7 +50,8 @@ class Post extends Component {
           <CardTitle
             title={post.title}
             subtitle={`${post.category} | ${post.commentCount} comments | ${post.voteScore} votes`}
-            actAsExpander={true}
+            onClick={() => this.props.history.push(`/${post.category}/${post.id}`)}
+            className={css(styles.cardTitle)}
           />
           <CardText expandable={true}>
             <p className={css(styles.postBody)}>{post.body}</p>
@@ -82,6 +84,11 @@ const styles = StyleSheet.create({
     margin: 'auto',
     padding: '16px'
   },
+  cardTitle: {
+    ':hover': {
+      cursor: 'pointer'
+    }
+  },
   cardActions: {
     textAlign: 'right'
   },
@@ -93,4 +100,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default Post
+export default withRouter(Post)

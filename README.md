@@ -1,7 +1,14 @@
+# Readable
+
 ## Installation
 
 Use `npm-install` and `npm-start` to get it installed and launched.
 
-## API Server
+## Server
 
-Information about the API server and how to use it can be found in [Udacity GitHub Repository](https://github.com/udacity/reactnd-project-readable-starter).
+In the terminal window:
+* Clone [Udacity GitHub Repository](https://github.com/udacity/reactnd-project-readable-starter)
+* `cd reactnd-project-readable-starter`
+* `cd api-server`
+* `npm install`
+* `npm start`
