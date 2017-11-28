@@ -4,7 +4,9 @@ import {
   ADD_POST,
   EDIT_POST,
   VOTE_POST,
-  DELETE_POST
+  DELETE_POST,
+  INCREMENT_COMMENT,
+  DECREMENT_COMMENT
 } from '../actions/posts'
 
 const initialState = {
@@ -58,6 +60,32 @@ export default function (state = initialState, action) {
         items: state.items.map((item) => {
           if (item.id === action.data.id) {
             return action.data
+          } else {
+            return item
+          }
+        })
+      })
+    case INCREMENT_COMMENT:
+      return Object.assign({}, state, {
+        items: state.items.map((item) => {
+          if (item.id === action.id) {
+            return {
+              ...item,
+              commentCount: item.commentCount + 1
+            }
+          } else {
+            return item
+          }
+        })
+      })
+    case DECREMENT_COMMENT:
+      return Object.assign({}, state, {
+        items: state.items.map((item) => {
+          if (item.id === action.id) {
+            return {
+              ...item,
+              commentCount: item.commentCount - 1
+            }
           } else {
             return item
           }

@@ -1,4 +1,5 @@
 import { api, headers } from '../utils/api'
+import { incrementComment, decrementComment } from './posts'
 
 export const REQUEST_COMMENTS = 'REQUEST_COMMENTS'
 export const RECEIVE_COMMENTS = 'RECEIVE_COMMENTS'
@@ -39,10 +40,13 @@ export const addComment = (data) => {
       },
       body: JSON.stringify(data)
     }).then(res => res.json())
-      .then(data => dispatch({
-        type: ADD_COMMENT,
-        data
-      }))
+      .then(data => {
+          dispatch({
+          type: ADD_COMMENT,
+          data
+        })
+        dispatch(incrementComment(data.parentId))
+      })
   }
 }
 
@@ -73,10 +77,13 @@ export const deleteComment = (id) => {
         'Content-Type': 'application/json'
       }
     }).then(res => res.json())
-      .then(data => dispatch({
-        type: DELETE_COMMENT,
-        data
-      }))
+      .then(data => {
+        dispatch({
+          type: DELETE_COMMENT,
+          data
+        })
+        dispatch(decrementComment(data.parentId))
+      })
   }
 }
 

@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
-import { CircularProgress, TextField, IconButton } from 'material-ui'
+import { TextField, IconButton, CircularProgress, RaisedButton } from 'material-ui'
 import ContentSend from 'material-ui/svg-icons/content/send'
-import * as api from '../utils/api'
 import { StyleSheet, css } from 'aphrodite'
 import Timestamp from 'react-timestamp'
 import { connect } from 'react-redux'
@@ -9,18 +8,16 @@ import { fetchComments, addComment, deleteComment, editComment, voteComment } fr
 import Comment from './Comment'
 import uuid from 'uuid'
 import ErrorPage from './ErrorPage'
+import { votePost } from '../actions/posts'
 
 class PostDetail extends Component {
 
   state = {
-    post: null,
     comment: ''
   }
 
   componentDidMount() {
     const id = this.props.match.params.id
-
-    api.getPostDetail(id).then(post => this.setState({ post }))
 
     this.props.fetchComments(id)
   }
@@ -48,9 +45,16 @@ class PostDetail extends Component {
   _voteComment = (id, option) => this.props.voteComment(id, option)
 
   render() {
-    const { post } = this.state
+    const id = this.props.match.params.id
 
-    if (!post) {
+    let post = null
+    this.props.posts.items.forEach(item => {
+      if (item.id === id) {
+        post = item
+      }
+    })
+    
+    if (this.props.posts.isFetching) {
       return (
         <div className={css(styles.progress)}>
           <CircularProgress />
@@ -58,7 +62,7 @@ class PostDetail extends Component {
       )
     }
 
-    if (Object.keys(post).length === 0 && post.constructor === Object) {
+    if (!post) {
       return (
         <ErrorPage />
       )
@@ -67,11 +71,17 @@ class PostDetail extends Component {
     return (
       <div className={css(styles.container)}>
         <h1>{post.title}</h1>
-        <h4 className={css(styles.lightText)}>by {post.author} on <Timestamp format='date' time={post.timestamp / 1000} /> in {post.category}</h4>
+        <h4 className={css(styles.lightText)}>by {post.author} on <Timestamp format='date' time={post.timestamp / 1000} /> in {post.category} | votes: {post.voteScore}</h4>
         <br />
         <p>{post.body}</p>
         <br />
-        <h3>Comments:</h3>
+        <RaisedButton label='Like' primary={true} onClick={() => this.props.votePost(post.id, 'upVote')} />
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <RaisedButton label='Dislike' secondary={true} onClick={() => this.props.votePost(post.id, 'downVote')} />
+        <br />
+        <br />
+        <br />
+        <h3>{post.commentCount} comments:</h3>
         {this.props.comments.filter((comment) => !comment.deleted).map((comment) =>
           <Comment
             key={comment.id}
@@ -116,7 +126,7 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => {
   return {
-    posts: state.posts.items,
+    posts: state.posts,
     comments: state.comments.items
   }
 }
@@ -127,7 +137,8 @@ const mapDispatchToProps = (dispatch) => {
     addComment: (data) => dispatch(addComment(data)),
     editComment: (id, data) => dispatch(editComment(id, data)),
     deleteComment: (id) => dispatch(deleteComment(id)),
-    voteComment: (id, option) => dispatch(voteComment(id, option))
+    voteComment: (id, option) => dispatch(voteComment(id, option)),
+    votePost: (id, option) => dispatch(votePost(id, option))
   }
 }
 

@@ -6,6 +6,8 @@ export const ADD_POST = 'ADD_POST'
 export const EDIT_POST = 'EDIT_POST'
 export const VOTE_POST = 'VOTE_POST'
 export const DELETE_POST = 'DELETE_POST'
+export const INCREMENT_COMMENT = 'INCREMENT_COMMENT'
+export const DECREMENT_COMMENT = 'DECREMENT_COMMENT'
 
 export const requestPosts = () => {
   return {
@@ -94,5 +96,19 @@ export const deletePost = (id) => {
         type: DELETE_POST,
         data
       }))
+  }
+}
+
+export const incrementComment = (id) => {
+  return {
+    type: INCREMENT_COMMENT,
+    id
+  }
+}
+
+export const decrementComment = (id) => {
+  return {
+    type: DECREMENT_COMMENT,
+    id
   }
 }
