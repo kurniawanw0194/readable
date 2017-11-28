@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { TextField, IconButton, CircularProgress, RaisedButton } from 'material-ui'
+import { TextField, IconButton, CircularProgress, RaisedButton, FlatButton, Dialog } from 'material-ui'
 import ContentSend from 'material-ui/svg-icons/content/send'
 import { StyleSheet, css } from 'aphrodite'
 import Timestamp from 'react-timestamp'
@@ -8,12 +8,13 @@ import { fetchComments, addComment, deleteComment, editComment, voteComment } fr
 import Comment from './Comment'
 import uuid from 'uuid'
 import ErrorPage from './ErrorPage'
-import { votePost } from '../actions/posts'
+import { votePost, deletePost } from '../actions/posts'
 
 class PostDetail extends Component {
 
   state = {
-    comment: ''
+    comment: '',
+    openDialog: false
   }
 
   componentDidMount() {
@@ -44,6 +45,15 @@ class PostDetail extends Component {
 
   _voteComment = (id, option) => this.props.voteComment(id, option)
 
+  _handleOpenDialog = () => this.setState({ openDialog: true })
+  
+  _handleCloseDialog = () => this.setState({ openDialog: false })
+
+  _handleDelete = (id) => {
+    this.props.deletePost(id)
+    this.props.history.push('/')
+  }
+
   render() {
     const id = this.props.match.params.id
 
@@ -68,6 +78,17 @@ class PostDetail extends Component {
       )
     }
 
+    const dialogActions = [
+      <FlatButton
+        label='No'
+        onClick={this._handleCloseDialog}
+      />,
+      <FlatButton
+        label='Yes'
+        onClick={() => this._handleDelete(post.id)}
+      />,
+    ]
+
     return (
       <div className={css(styles.container)}>
         <h1>{post.title}</h1>
@@ -79,6 +100,8 @@ class PostDetail extends Component {
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <RaisedButton label='Dislike' secondary={true} onClick={() => this.props.votePost(post.id, 'downVote')} />
         <br />
+        <br />
+        <FlatButton label='Delete' secondary={true} onClick={this._handleOpenDialog} />
         <br />
         <br />
         <h3>{post.commentCount} comments:</h3>
@@ -100,6 +123,15 @@ class PostDetail extends Component {
             <ContentSend />
           </IconButton>
         </div>
+        <Dialog
+          title='Delete Post'
+          actions={dialogActions}
+          modal={false}
+          open={this.state.openDialog}
+          onRequestClose={this._handleCloseDialog}
+        >
+          Are you sure?
+        </Dialog>
       </div>
     )
   }
@@ -138,7 +170,8 @@ const mapDispatchToProps = (dispatch) => {
     editComment: (id, data) => dispatch(editComment(id, data)),
     deleteComment: (id) => dispatch(deleteComment(id)),
     voteComment: (id, option) => dispatch(voteComment(id, option)),
-    votePost: (id, option) => dispatch(votePost(id, option))
+    votePost: (id, option) => dispatch(votePost(id, option)),
+    deletePost: (id) => dispatch(deletePost(id))
   }
 }
 
