@@ -96,6 +96,8 @@ class PostDetail extends Component {
         <br />
         <p>{post.body}</p>
         <br />
+        <RaisedButton label='Edit' href={`/edit/${post.id}`} />
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <RaisedButton label='Like' primary={true} onClick={() => this.props.votePost(post.id, 'upVote')} />
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <RaisedButton label='Dislike' secondary={true} onClick={() => this.props.votePost(post.id, 'downVote')} />
